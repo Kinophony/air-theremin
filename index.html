@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Air Theremin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="loading">
+  <div id="loading-title">AIR THEREMIN</div>
+  <div id="loading-bar-wrap"><div id="loading-bar"></div></div>
+  <div id="loading-text">LOADING HAND TRACKING...</div>
+</div>
+
+<div id="header">
+  <div id="title">AIR THEREMIN</div>
+  <div id="status-bar">
+    <div class="stat">
+      <span class="stat-label">FREQ</span>
+      <span class="stat-value" id="freq-display">-- Hz</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">NOTE</span>
+      <span class="stat-value" id="note-display-header">--</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">VOL</span>
+      <span class="stat-value" id="vol-display">0%</span>
+    </div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="camera-container">
+    <div class="grid-lines"></div>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+    <canvas id="viz-canvas"></canvas>
+
+    <div id="overlay-message">
+      <div class="big">HANDS READY</div>
+      <div class="sub">
+        右手 X軸 → 音程<br>
+        左手 Y軸 → 音量<br>
+        「START」を押して演奏開始
+      </div>
+    </div>
+
+    <div id="note-display">C4</div>
+  </div>
+
+  <div id="controls-panel">
+
+    <button id="start-btn" onclick="togglePlay()">START</button>
+
+    <div class="panel-section">
+      <div class="panel-title">WAVE FORM</div>
+      <div class="wave-buttons">
+        <button class="wave-btn active" onclick="setWave('sine')">SINE</button>
+        <button class="wave-btn" onclick="setWave('triangle')">TRI</button>
+        <button class="wave-btn" onclick="setWave('sawtooth')">SAW</button>
+        <button class="wave-btn" onclick="setWave('square')">SQR</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">SCALE</div>
+      <div class="scale-selector">
+        <select id="scale-select" onchange="setScale(this.value)">
+          <option value="chromatic">Chromatic</option>
+          <option value="major" selected>Major</option>
+          <option value="minor">Minor</option>
+          <option value="pentatonic">Pentatonic</option>
+          <option value="blues">Blues</option>
+          <option value="dorian">Dorian</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">SYNTH</div>
+      <div class="knob-row">
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>REVERB</span>
+            <span class="knob-val" id="reverb-val">40%</span>
+          </div>
+          <input type="range" id="reverb" min="0" max="100" value="40"
+            oninput="updateReverb(this.value)">
+        </div>
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>VIBRATO</span>
+            <span class="knob-val" id="vibrato-val">20%</span>
+          </div>
+          <input type="range" id="vibrato" min="0" max="100" value="20"
+            oninput="updateVibrato(this.value)">
+        </div>
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>ATTACK</span>
+            <span class="knob-val" id="attack-val">0.1s</span>
+          </div>
+          <input type="range" id="attack" min="1" max="50" value="5"
+            oninput="updateAttack(this.value)">
+        </div>
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>PORTAMENTO</span>
+            <span class="knob-val" id="porta-val">80ms</span>
+          </div>
+          <input type="range" id="portamento" min="0" max="200" value="80"
+            oninput="updatePortamento(this.value)">
+        </div>
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>OCTAVE</span>
+            <span class="knob-val" id="octave-val">C3–C6</span>
+          </div>
+          <input type="range" id="octave" min="2" max="5" value="3" step="1"
+            oninput="updateOctave(this.value)">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">HANDS</div>
+      <div class="hand-indicator">
+        <div class="hand-dot right">
+          <div class="dot"></div>
+          <span>右 = PITCH</span>
+        </div>
+        <div class="hand-dot left">
+          <div class="dot"></div>
+          <span>左 = VOL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="js/audio.js"></script>
+<script src="js/visualizer.js"></script>
+<script src="js/tracker.js"></script>
+</body>
+</html>

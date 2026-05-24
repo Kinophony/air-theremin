@@ -91,6 +91,34 @@ body {
   transform: scaleX(-1);
   opacity: 0.35;
   display: block;
+  transition: opacity 0.4s ease;
+}
+
+#video.cam-off { opacity: 0; }
+
+#cam-toggle-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 1px solid rgba(0,245,196,0.3);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+#cam-toggle-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+#cam-toggle-btn.active {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: rgba(0,245,196,0.08);
 }
 
 #canvas {
@@ -98,7 +126,6 @@ body {
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  transform: scaleX(-1);
 }
 
 #viz-canvas {

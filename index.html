@@ -17,6 +17,7 @@
 <div id="header">
   <div id="title">AIR THEREMIN</div>
   <div id="status-bar">
+    <button id="cam-toggle-btn">📷 OFF</button>
     <div class="stat">
       <span class="stat-label">FREQ</span>
       <span class="stat-value" id="freq-display">-- Hz</span>
@@ -119,13 +120,29 @@
             oninput="updatePortamento(this.value)">
         </div>
 
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">RANGE</div>
+      <div class="knob-row">
+
         <div class="knob-item">
           <div class="knob-label">
-            <span>OCTAVE</span>
-            <span class="knob-val" id="octave-val">C3–C6</span>
+            <span>MIN</span>
+            <span class="knob-val" id="min-hz-val">130 Hz</span>
           </div>
-          <input type="range" id="octave" min="2" max="5" value="3" step="1"
-            oninput="updateOctave(this.value)">
+          <input type="range" id="min-hz" min="50" max="4000" step="10" value="130"
+            oninput="updateMinHz(this.value)">
+        </div>
+
+        <div class="knob-item">
+          <div class="knob-label">
+            <span>MAX</span>
+            <span class="knob-val" id="max-hz-val">2000 Hz</span>
+          </div>
+          <input type="range" id="max-hz" min="200" max="8000" step="10" value="2000"
+            oninput="updateMaxHz(this.value)">
         </div>
 
       </div>

@@ -21,14 +21,14 @@ function onResults(results) {
   for (let i = 0; i < results.multiHandLandmarks.length; i++) {
     const hand = results.multiHandLandmarks[i];
     const label = results.multiHandedness[i].label;
-    if (label === 'Right') rightHand = hand;
+    if (label === 'Left') rightHand = hand;
     else leftHand = hand;
   }
 
   for (let i = 0; i < results.multiHandLandmarks.length; i++) {
     const hand = results.multiHandLandmarks[i];
     const label = results.multiHandedness[i].label;
-    const color = label === 'Right' ? '#00f5c4' : '#7b5ea7';
+    const color = label === 'Left' ? '#00f5c4' : '#7b5ea7';
 
     for (const conn of window.HAND_CONNECTIONS || []) {
       const a = hand[conn[0]], b = hand[conn[1]];
@@ -54,7 +54,7 @@ function onResults(results) {
 
   if (rightHand) {
     const indexTip = rightHand[8];
-    const freq = xToFreq(indexTip.x);
+    const freq = xToFreq(1 - indexTip.x);
 
     trailPoints.push({ x: indexTip.x, y: indexTip.y });
     if (trailPoints.length > 30) trailPoints.shift();
@@ -135,3 +135,13 @@ async function initCamera() {
 }
 
 initCamera();
+
+const camToggleBtn = document.getElementById('cam-toggle-btn');
+let showCameraImage = true;
+
+camToggleBtn.addEventListener('click', () => {
+  showCameraImage = !showCameraImage;
+  video.classList.toggle('cam-off', !showCameraImage);
+  camToggleBtn.textContent = showCameraImage ? '📷 OFF' : '📷 ON';
+  camToggleBtn.classList.toggle('active', !showCameraImage);
+});

@@ -22,7 +22,8 @@ let portamentoMs = 80;
 let attackTime = 0.1;
 let reverbAmount = 0.4;
 let vibratoAmount = 0.2;
-let baseOctave = 3;
+let minHz = 130;
+let maxHz = 2000;
 let currentFreq = 440;
 let smoothVol = 0;
 
@@ -40,12 +41,13 @@ function freqToNoteName(freq) {
 function getScaleNotes() {
   const scale = SCALES[currentScale];
   const notes = [];
-  for (let o = baseOctave; o <= baseOctave + 3; o++) {
-    for (const interval of scale) {
-      notes.push(o * 12 + interval);
+  for (let midi = 0; midi <= 127; midi++) {
+    if (scale.includes(midi % 12)) {
+      const freq = midiToFreq(midi);
+      if (freq >= minHz && freq <= maxHz) notes.push(midi);
     }
   }
-  return notes.sort((a, b) => a - b);
+  return notes;
 }
 
 function xToFreq(x) {
@@ -153,7 +155,22 @@ function updatePortamento(val) {
   document.getElementById('porta-val').textContent = val + 'ms';
 }
 
-function updateOctave(val) {
-  baseOctave = parseInt(val);
-  document.getElementById('octave-val').textContent = 'C' + val + '–C' + (parseInt(val) + 3);
+function updateMinHz(val) {
+  minHz = parseInt(val);
+  if (minHz >= maxHz) {
+    maxHz = minHz + 100;
+    document.getElementById('max-hz').value = maxHz;
+    document.getElementById('max-hz-val').textContent = maxHz + ' Hz';
+  }
+  document.getElementById('min-hz-val').textContent = minHz + ' Hz';
+}
+
+function updateMaxHz(val) {
+  maxHz = parseInt(val);
+  if (maxHz <= minHz) {
+    minHz = Math.max(50, maxHz - 100);
+    document.getElementById('min-hz').value = minHz;
+    document.getElementById('min-hz-val').textContent = minHz + ' Hz';
+  }
+  document.getElementById('max-hz-val').textContent = maxHz + ' Hz';
 }
